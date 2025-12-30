@@ -168,15 +168,24 @@
                         <!-- 
                             IMPORTANT INSTRUCTION FOR UPLOADING:
                             1. Ensure 'books/Ilhad-Aik-Taruf.pdf' exists.
+                            2. If file name is different, update the href below.
                         -->
                         <div class="flex gap-2 mt-auto">
                             <!-- Read Online Button -->
-                            <a href="books/Ilhad-Aik-Taruf.pdf" target="_blank" class="flex-1 text-center bg-white text-brand border border-brand py-2 rounded-lg hover:bg-brand-50 transition font-bold shadow-sm flex items-center justify-center text-sm">
+                            <a href="books/Ilhad-Aik-Taruf.pdf" 
+                               target="_blank" 
+                               type="application/pdf"
+                               onclick="validateFile(event, this.href)"
+                               class="flex-1 text-center bg-white text-brand border border-brand py-2 rounded-lg hover:bg-brand-50 transition font-bold shadow-sm flex items-center justify-center text-sm cursor-pointer">
                                 <i data-lucide="eye" class="ml-1 w-4 h-4"></i>
                                 پڑھیں
                             </a>
                             <!-- Download Button -->
-                            <a href="books/Ilhad-Aik-Taruf.pdf" download class="flex-1 text-center bg-brand text-white py-2 rounded-lg hover:bg-brand-dark transition font-bold shadow-sm flex items-center justify-center text-sm">
+                            <a href="books/Ilhad-Aik-Taruf.pdf" 
+                               download="Ilhad-Aik-Taruf.pdf"
+                               type="application/pdf" 
+                               onclick="validateFile(event, this.href)"
+                               class="flex-1 text-center bg-brand text-white py-2 rounded-lg hover:bg-brand-dark transition font-bold shadow-sm flex items-center justify-center text-sm cursor-pointer">
                                 <i data-lucide="download" class="ml-1 w-4 h-4"></i>
                                 ڈاؤنلوڈ
                             </a>
@@ -307,17 +316,34 @@
         // Initialize Icons
         lucide.createIcons();
 
+        // Helper function to validate file existence (Mock check for user guidance)
+        function validateFile(event, url) {
+            // This function runs when the user clicks.
+            // Note: Since we are running local files (file://), standard fetch requests often fail due to CORS.
+            // We can't 100% reliably detect "File Not Found" vs "Security Error".
+            // So we rely on a timeout check or basic error handling.
+            
+            // Just a console log for debugging
+            console.log("User clicked to open: " + url);
+
+            // If the user is in the Preview Environment (blob/about:blank), alert them.
+            if (window.location.protocol === 'blob:' || window.location.href.includes('scf.usercontent.goog')) {
+                alert("یہ صرف ایک ڈیمو (Demo) ہے۔\n\nاصلی ڈاؤنلوڈ کے لیے اس کوڈ کو ڈاؤنلوڈ کریں اور اپنے کمپیوٹر پر چلائیں۔\nیقینی بنائیں کہ آپ کے پاس 'books' فولڈر اور 'Ilhad-Aik-Taruf.pdf' فائل موجود ہے۔");
+                // Don't prevent default in preview, let them see the 404 page so they understand.
+            }
+        }
+
         // Mobile Menu Toggle
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         }
 
-        // Smooth Scroll for anchor links
+        // Fixed Smooth Scroll for anchor links (Replaces the broken code)
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
-                if(href && href !== '#') {
+                if(href && href !== '#' && href.startsWith('#')) {
                     e.preventDefault();
                     const targetElement = document.querySelector(href);
                     if (targetElement) {
